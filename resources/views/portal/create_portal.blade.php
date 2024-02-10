@@ -15,7 +15,7 @@
                                 <div class="col-md-6 mb-1">
                                     <label class="form-label" for="portal-name">Portal Name</label>
                                     <input type="text" id="portal-name" class="form-control" name="portal_name"
-                                        placeholder="Portal Name">
+                                       required placeholder="Portal Name">
                                     @error('portal_name')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -30,7 +30,7 @@
                                 <div class="col-md-6 mb-1">
                                     <label class="form-label" for="portal-desc">Portal Desc</label>
                                     <input type="text" id="portal-desc" class="form-control" name="portal_desc"
-                                        placeholder="Portal Desc">
+                                       required placeholder="Portal Desc">
                                     @error('portal_desc')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -38,8 +38,40 @@
                                 <div class="col-md-6 mb-1">
                                     <label class="form-label" for="url">Portal URL</label>
                                     <input type="url" id="url" class="form-control" name="url"
-                                        placeholder="https://www.abcd.com">
+                                       required placeholder="https://www.abcd.com">
                                     @error('url')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label class="form-label" for="portal-desc">Portal Host</label>
+                                    <input type="text" id="portal-host" class="form-control" name="portal_host"
+                                       required placeholder="Portal host">
+                                    @error('portal_host')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label class="form-label" for="portal-desc">Portal Database</label>
+                                    <input type="text" id="portal-database" class="form-control" name="portal_database"
+                                       required placeholder="Portal database">
+                                    @error('portal_database')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label class="form-label" for="portal-desc">Portal Database Username</label>
+                                    <input type="text" id="portal-username" class="form-control" name="portal_username"
+                                       required placeholder="Portal username">
+                                    @error('portal_username')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label class="form-label" for="portal-desc">Portal Database Password</label>
+                                    <input type="text" id="portal-password" class="form-control" name="portal_password"
+                                       required placeholder="Portal password">
+                                    @error('portal_password')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>

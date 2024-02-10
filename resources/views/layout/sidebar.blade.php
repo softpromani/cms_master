@@ -61,8 +61,8 @@
                     <span class="menu-title text-truncate" data-i18n="Home">Dashboard</span>
                 </a>
             </li>
-            <li class="{{ request()->routeIs('create.user') ? 'active' : '' }} nav-item">
-                <a class="d-flex align-items-center" href="{{ route('create.user') }}">
+            <li class="{{ request()->routeIs('user.list') ? 'active' : '' }} nav-item">
+                <a class="d-flex align-items-center" href="{{ route('user.list') }}">
                     <i data-feather="user"></i>
                     <span class="menu-title text-truncate" data-i18n="Home">User</span>
                 </a>

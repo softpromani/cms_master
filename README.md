@@ -64,3 +64,12 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+Config::set('database.connections.custome', [
+            'driver' => 'mysql',
+            'host' => 'srv1277.hstgr.io',
+            'database' => 'u868238337_cms_grievance',
+            'username' => 'u868238337_cms_grievance',
+            'password' => 'Itrove@431',
+        ]);

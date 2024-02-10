@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
+use App\Models\Portals\User as PortalsUser;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Validation\Rule;
+
 
 class UserController extends Controller
 {
@@ -20,6 +24,11 @@ class UserController extends Controller
         $roles = Role::all();
         $portals = Portal::get();
         return view('users.index', compact('roles', 'portals'));
+    }
+
+    public function user_list(){
+        $users = User::paginate(10);
+        return view('users.user_list',compact('users'));
     }
 
     public function store(Request $request)
@@ -57,6 +66,7 @@ class UserController extends Controller
                 "pincode" => $request->pincode,
                 "address1" => $request->address1,
                 "address2" => $request->address2,
+                'password'=>Hash::make('123456789'),
             ])->syncRoles($request->role);
 
             foreach ($request->portals as $portal) {
@@ -65,7 +75,6 @@ class UserController extends Controller
                     'portal_id' => $portal,
                 ]);
             }
-
             event(new UserRegistered($user));
 
             return redirect()->back()->with("success", "User Created Successfully!");
@@ -92,13 +101,27 @@ class UserController extends Controller
         $request->validate([
             'password' => 'required|min:8|confirmed',
             'password_confirmation' => 'required|min:8',
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users,email',
         ]);
-
         $data = User::where('email', $request->email)->first();
         User::find($data->id)->update([
             'password' => Hash::make($request->password),
         ]);
+
+        foreach ($data->portals() as $portal)
+        {
+            Config::set('database.connections.dynamic', [
+                'driver' => 'mysql',
+                'host' => $portal->host,
+                'database' => $portal->dynamic_database,
+                'username' => $portal->dynamic_username,
+                'password' => $portal->dynamic_password,
+            ]);
+            $portal_user = PortalsUser::on('dynamic')->where('email', $request->email)->first();
+            PortalsUser::on('dynamic')->find($portal_user->id)->update([
+                'password'=>Hash::make($request->password),
+            ]);
+        }
 
         return redirect()->route('login')->with('success', 'Your Password Created Successfully Please Login!');
     }
@@ -110,10 +133,15 @@ class UserController extends Controller
             'password' => 'required',
         ]);
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $token = Auth::user()->createToken('token-name')->plainTextToken;
             // Authentication successful
             if (Auth::user()->hasRole('User')) {
-                return redirect()->route('user.dashboard')->with('success', 'Login successful!');
+               $portalsArray = Auth::user()->portals()->pluck('name')->toArray();
+            // Add portal names as abilities to the user
+            Auth::user()->abilities = $portalsArray;
+
+            $token = Auth::user()->createToken('token-name', $portalsArray)->plainTextToken;
+            session(['access_token' => $token]);
+                return redirect()->route('user.dashboard')->with('success','Login successful!');
             }else {
                 return redirect()->route('admin.dashboard')->with('success', 'Login successful!');
             }

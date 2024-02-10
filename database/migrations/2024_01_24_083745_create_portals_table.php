@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->string('website_url');
+            $table->string('host');
+            $table->string('dynamic_password');
+            $table->string('dynamic_username');
+            $table->string('dynamic_database');
             $table->string('image');
             $table->timestamps();
         });

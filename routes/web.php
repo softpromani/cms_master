@@ -21,6 +21,10 @@ Route::get('/', function () { return view('login');})->name('login');
 Route::get('create-password',[UserController::class,'create_password'])->name('create.password');
 Route::post('update-password',[UserController::class,'update_password'])->name('update.password');
 
+Route::get('user-list',[UserController::class,'user_list'])->name('user.list');
+
+Route::get('portals-user-role/{portal_id}/{user_id}',[PortalController::class,'portal_role'])->name('portals.user.role');
+
 Route::get('user-dashboard',[UserController::class,'user_dashboard'])->name('user.dashboard');
 Route::get('/admin', function () {return view('welcome');})->name('admin.dashboard');
 Route::get('role',[RoleController::class,'role'])->name('role');

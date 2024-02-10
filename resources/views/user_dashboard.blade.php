@@ -376,7 +376,7 @@
         </p>
         <!-- Portals cards -->
         <div class="row">
-            @foreach (Auth::user()->portals() as $portal)
+            @foreach(Auth::user()->portals() as $portal)
                     <div class="col-lg-4 col-md-6 col-12">
                         <div class="card card-developer-meetup">
                             <div class="meetup-img-wrapper rounded-top text-center">
@@ -392,7 +392,7 @@
                                 </div>
                                 <div class="d-flex flex-row meetings">
                                     <div class="content-body">
-                                        <a href="{{$portal->website_url ?? '' }}" target="_blank"
+                                        <a href="{{$portal->website_url ?? '#' }}{{'?access_token='.Session::get('access_token')}}" target="_blank"
                                             class="card-link"><i data-feather="link"
                                                 class="avatar-icon font-medium-3"></i> Website link </a>
                                     </div>
