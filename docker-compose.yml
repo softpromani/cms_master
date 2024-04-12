@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  # PHP Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: website
+    container_name: cms_master
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "9050:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: db # Use the service name of the MySQL service
+      DB_PORT: 3306
+      DB_DATABASE: cms_master
+      DB_USERNAME: manish
+      DB_PASSWORD: 12345678
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # MySQL Service
+  db:
+    image: mysql:5.7
+    container_name: cms_masterDB
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: cms_master
+      MYSQL_USER: manish
+      MYSQL_PASSWORD: 12345678
+      MYSQL_ROOT_PASSWORD: 12345678
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3350:3306"
+    networks:
+      - app-network
+
+  # PHPMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: cms_masterDBweb
+    restart: unless-stopped
+    ports:
+      - "8050:80" # Maps port 8080 on the host to port 80 on the container
+    environment:
+      PMA_HOST: db
+      PMA_USER: manish
+      PMA_PASSWORD: 12345678
+      MYSQL_ROOT_PASSWORD: 12345678
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+# Volumes for persisting database data
+volumes:
+  dbdata:
+
+networks:
+  app-network:
+    driver: bridge
