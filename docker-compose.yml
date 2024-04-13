@@ -57,6 +57,20 @@ services:
       - db
     networks:
       - app-network
+  # cms grievance admin
+  grievance:
+      container_name: cms_grievance    
+      build: . # build from Dockerfile in current directory - see https://github.com/docker-library/php/issues/391#issuecomment-689687261
+      ports:
+        - 9051:80
+      extra_hosts:
+        - host.docker.internal:host-gateway
+      volumes:
+        - ../cms_grievance:/var/www/html/ # mount current directory to /var/www/html/ in container
+      depends_on:
+      - db
+      networks:
+        - app-network
 
 # Volumes for persisting database data
 volumes:
